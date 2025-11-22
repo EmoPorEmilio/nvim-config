@@ -18,55 +18,83 @@ require("lazy").setup({
   spec = {
     -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+
     -- import/override with your plugins
     { import = "plugins" },
-    { "RRethy/nvim-base16" },
+
+    -- == VIVIANA THEME ENGINE ==
+    {
+      "nvim-mini/mini.nvim",
+      version = "*",
+      lazy = false, -- Load immediately
+      priority = 1000,
+      config = function()
+        -- Define the Viviana Ice Palette
+        require("mini.base16").setup({
+          palette = {
+            base00 = "#1D272E", -- bg-400: Canvas
+            base01 = "#24313a", -- bg-300: Status Bar
+            base02 = "#293E4B", -- bg-200: Selection Highlight
+            base03 = "#4F6D85", -- primary-700: Comments (Dark Blue-Grey)
+            base04 = "#58748B", -- primary-600: Line Nrs / Cursor
+            base05 = "#C0C6CA", -- gray-100: Default Code
+            base06 = "#D9F2FF", -- primary-100: Light Text
+            base07 = "#FFFFFF", -- white: Highlights
+
+            -- LOGIC (Viviana Blue)
+            base08 = "#75ABC7", -- primary-500 (Variables)
+            base0D = "#75ABC7", -- primary-500 (Functions - Matching Logic)
+
+            -- ACTION (Viviana Pink)
+            base0E = "#DF5C9A", -- accent-500 (Keywords)
+            base09 = "#FF88C0", -- accent-300 (Booleans/Numbers)
+
+            -- DATA (Ice Blue - No Green)
+            base0B = "#D0E9F5", -- primary-200 (Strings)
+
+            -- HEADERS (White)
+            base0A = "#FFFFFF", -- white (Classes/Types)
+
+            -- UTILITY
+            base0C = "#A2AEB4", -- gray-200 (Regex/Escape)
+            base0F = "#4F6D85", -- Deprecated (Hide)
+          },
+        })
+
+        -- Apply Custom Overrides (The "Polishing" Step)
+        -- We do this manually to ensure the search and strings are perfect
+        local highlights = {
+          Search = { bg = "#DF5C9A", fg = "#FFFFFF", bold = true },
+          IncSearch = { bg = "#FF88C0", fg = "#1D272E" },
+          Comment = { fg = "#4F6D85", italic = true },
+          String = { fg = "#D0E9F5" }, -- Enforce Ice Blue Strings
+          LineNr = { fg = "#4C6477" }, -- Subtle Line Numbers
+          CursorLineNr = { fg = "#DF5C9A", bold = true }, -- Pink Current Line Number
+        }
+
+        for group, settings in pairs(highlights) do
+          vim.api.nvim_set_hl(0, group, settings)
+        end
+      end,
+    },
   },
   defaults = {
-    -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
-    -- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.
     lazy = false,
-    -- It's recommended to leave version=false for now, since a lot the plugin that support versioning,
-    -- have outdated releases, which may break your Neovim install.
-    version = false, -- always use the latest git commit
-    -- version = "*", -- try installing the latest stable version for plugins that support semver
+    version = false,
   },
-  install = { colorscheme = { "tokyonight", "habamax" } },
+  install = { colorscheme = { "minischeme", "tokyonight", "habamax" } },
   checker = {
-    enabled = true, -- check for plugin updates periodically
-    notify = false, -- notify on update
-  }, -- automatically check for plugin updates
+    enabled = true,
+    notify = false,
+  },
   performance = {
     rtp = {
-      -- disable some rtp plugins
       disabled_plugins = {
         "gzip",
-        -- "matchit",
-        -- "matchparen",
-        -- "netrwPlugin",
         "tarPlugin",
         "tohtml",
         "zipPlugin",
       },
     },
   },
-})
-
-require("base16-colorscheme").setup({
-  base00 = "#1A2328", --proyecto-viviana-dark-bg
-  base01 = "#2c313c",
-  base02 = "#3e4451",
-  base03 = "#6c7891",
-  base04 = "#565c64",
-  base05 = "#abb2bf",
-  base06 = "#9a9bb3",
-  base07 = "#c5c8e6",
-  base08 = "#75ABC7", --proyecto-viviana-strongblue
-  base09 = "#ffffff", --white
-  base0A = "#e5c07b",
-  base0B = "#A0C4E1", --proyecto-viviana-lightblue
-  base0C = "#56b6c2",
-  base0D = "#ffb2d7", --proyecto-viviana-lightpink
-  base0E = "#DF5C9A", --proyecto-viviana-strongpink
-  base0F = "#a06949",
 })
