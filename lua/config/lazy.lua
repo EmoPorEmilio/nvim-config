@@ -16,20 +16,16 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   spec = {
-    -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
 
-    -- import/override with your plugins
     { import = "plugins" },
 
-    -- == VIVIANA THEME ENGINE ==
     {
       "nvim-mini/mini.nvim",
       version = "*",
-      lazy = false, -- Load immediately
+      lazy = false,
       priority = 1000,
       config = function()
-        -- Define the Viviana Ice Palette
         require("mini.base16").setup({
           palette = {
             base00 = "#1D272E", -- bg-400: Canvas
@@ -41,35 +37,29 @@ require("lazy").setup({
             base06 = "#D9F2FF", -- primary-100: Light Text
             base07 = "#FFFFFF", -- white: Highlights
 
-            -- LOGIC (Viviana Blue)
             base08 = "#75ABC7", -- primary-500 (Variables)
             base0D = "#75ABC7", -- primary-500 (Functions - Matching Logic)
 
-            -- ACTION (Viviana Pink)
             base0E = "#DF5C9A", -- accent-500 (Keywords)
             base09 = "#FF88C0", -- accent-300 (Booleans/Numbers)
 
-            -- DATA (Ice Blue - No Green)
             base0B = "#D0E9F5", -- primary-200 (Strings)
 
-            -- HEADERS (White)
             base0A = "#FFFFFF", -- white (Classes/Types)
 
-            -- UTILITY
             base0C = "#A2AEB4", -- gray-200 (Regex/Escape)
             base0F = "#4F6D85", -- Deprecated (Hide)
           },
         })
 
-        -- Apply Custom Overrides (The "Polishing" Step)
-        -- We do this manually to ensure the search and strings are perfect
+        -- Apply Custom Overrides
         local highlights = {
           Search = { bg = "#DF5C9A", fg = "#FFFFFF", bold = true },
           IncSearch = { bg = "#FF88C0", fg = "#1D272E" },
           Comment = { fg = "#4F6D85", italic = true },
-          String = { fg = "#D0E9F5" }, -- Enforce Ice Blue Strings
-          LineNr = { fg = "#4C6477" }, -- Subtle Line Numbers
-          CursorLineNr = { fg = "#DF5C9A", bold = true }, -- Pink Current Line Number
+          String = { fg = "#D0E9F5" },
+          LineNr = { fg = "#4C6477" },
+          CursorLineNr = { fg = "#DF5C9A", bold = true },
         }
 
         for group, settings in pairs(highlights) do
@@ -82,7 +72,7 @@ require("lazy").setup({
     lazy = false,
     version = false,
   },
-  install = { colorscheme = { "minischeme", "tokyonight", "habamax" } },
+  install = { colorscheme = { "minischeme" } },
   checker = {
     enabled = true,
     notify = false,
